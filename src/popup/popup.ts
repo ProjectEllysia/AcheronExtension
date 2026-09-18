@@ -11,9 +11,9 @@
  * la pestaña. Sin esa apertura la extensión no puede ni mirar dónde está.
  */
 
-import type { Candidate, Request, Response, Status } from '../shared/messages.js'
+import type { Candidate, Request, Response, Settings, Status } from '../shared/messages.js'
 
-const screens = ['login', 'mfa', 'unlock', 'vault'] as const
+const screens = ['login', 'mfa', 'unlock', 'vault', 'ajustes'] as const
 type Screen = (typeof screens)[number]
 
 /** El desafío pendiente de MFA, si el login lo pidió. Vive lo que vive el popup. */
@@ -24,6 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
   byId<HTMLFormElement>('form-mfa').addEventListener('submit', guard(doMfa))
   byId<HTMLFormElement>('form-unlock').addEventListener('submit', guard(doUnlock))
   byId<HTMLButtonElement>('lock').addEventListener('click', guard(doLock))
+  byId<HTMLButtonElement>('ajustes').addEventListener('click', guard(openSettings))
+  byId<HTMLButtonElement>('ajustes-volver').addEventListener('click', guard(refresh))
+  byId<HTMLFormElement>('form-ajustes').addEventListener('submit', guard(saveSettings))
   void refresh()
 })
 
@@ -31,6 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
 async function refresh(): Promise<void> {
   const status = await send<Status>({ type: 'status' })
   byId('lock').hidden = !status.unlocked
+  // Los ajustes están disponibles con la sesión iniciada, abierta la bóveda o
+  // no: el tiempo de bloqueo es justo lo que uno quiere tocar cuando la bóveda
+  // se le acaba de cerrar sola.
+  byId('ajustes').hidden = !status.authenticated
 
   if (!status.authenticated) return show('login')
   if (!status.unlocked) return show('unlock')
@@ -113,6 +120,48 @@ async function doUnlock(): Promise<void> {
 async function doLock(): Promise<void> {
   await send({ type: 'lock' })
   await refresh()
+}
+
+/* ── Ajustes ────────────────────────────────────────────────────────────── */
+
+async function openSettings(): Promise<void> {
+  byId('ajustes-ok').hidden = true
+  paintSettings(await send<Settings>({ type: 'settings' }))
+  show('ajustes')
+}
+
+/**
+ * Guarda y **se queda** en la pantalla, repintando con lo que el service worker
+ * haya aceptado de verdad.
+ *
+ * Importa porque el valor se acota: quien escriba 500 minutos recibe 120, y si
+ * el popup se cerrara o volviera atrás al guardar, se iría creyendo que tiene
+ * 500. La casilla cambiando de 500 a 120 delante de sus ojos es el aviso.
+ */
+async function saveSettings(): Promise<void> {
+  const pedidos = Number(value('lock-minutes'))
+  const settings = await send<Settings>({ type: 'settings/lock-minutes', minutes: pedidos })
+  paintSettings(settings)
+
+  const aviso = byId('ajustes-ok')
+  aviso.textContent =
+    settings.lockMinutes === Math.round(pedidos)
+      ? `Guardado: la bóveda se bloqueará tras ${settings.lockMinutes} minutos sin usarla.`
+      : `Guardado, pero acotado a ${settings.lockMinutes} minutos: ${settings.maxLockMinutes} es el máximo.`
+  aviso.hidden = false
+}
+
+/**
+ * Vuelca los ajustes en el formulario.
+ *
+ * El tope lo manda el service worker en vez de estar escrito aquí: así el
+ * formulario no puede prometer un valor que el otro lado va a recortar.
+ */
+function paintSettings(settings: Settings): void {
+  byId<HTMLInputElement>('lock-minutes').value = String(settings.lockMinutes)
+  byId<HTMLInputElement>('lock-minutes').max = String(settings.maxLockMinutes)
+  byId('ajustes-tope').textContent =
+    `minutos sin usarla. Entre 1 y ${settings.maxLockMinutes}.`
 }
 
 /* ── Fontanería ─────────────────────────────────────────────────────────── */

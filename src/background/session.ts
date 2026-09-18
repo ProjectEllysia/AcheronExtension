@@ -114,6 +114,31 @@ export async function lockMinutes(): Promise<number> {
 }
 
 /**
+ * Cambia el tiempo de inactividad configurado.
+ *
+ * Acota entre 1 minuto y el techo, y **no admite desactivarlo**: un «no
+ * bloquear nunca» convierte un robo de equipo desatendido en un robo de todas
+ * las credenciales, y por eso el tope no es una sugerencia.
+ *
+ * Re-arma la alarma en el acto. Sin eso, bajar el tiempo de 60 a 5 minutos no
+ * tendría efecto hasta el siguiente uso: la alarma vieja seguiría corriendo y
+ * la bóveda quedaría abierta 55 minutos más de los que el usuario acaba de
+ * pedir, que es justo lo contrario de lo que pidió.
+ */
+export async function setLockMinutes(minutes: number): Promise<number> {
+  if (!Number.isFinite(minutes) || minutes < 1) {
+    throw new Error('El tiempo de bloqueo tiene que ser de al menos un minuto')
+  }
+  const acotado = Math.min(Math.round(minutes), MAX_LOCK_MINUTES)
+  await chrome.storage.local.set({ lockMinutes: acotado })
+
+  if (await chrome.storage.session.get(SESSION_KEY).then((s) => s[SESSION_KEY] != null)) {
+    await armLockAlarm()
+  }
+  return acotado
+}
+
+/**
  * Arma la alarma de bloqueo.
  *
  * Es `chrome.alarms` y no `setTimeout` por la misma razón que existe todo este

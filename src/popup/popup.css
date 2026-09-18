@@ -20,8 +20,13 @@ body {
 header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 0.5rem;
   margin-bottom: 0.75rem;
+}
+
+/* Empuja los botones al extremo sin que el título deje de mandar en el hueco. */
+.espacio {
+  flex: 1;
 }
 
 h1 {
@@ -45,6 +50,10 @@ label {
   display: block;
   margin-bottom: 0.75rem;
   color: var(--tenue);
+}
+
+input[type="number"] {
+  width: 5rem;
 }
 
 input {
@@ -73,10 +82,16 @@ form button {
   width: 100%;
 }
 
-header button {
+header button,
+#ajustes-volver {
   background: transparent;
   border: 1px solid var(--borde);
   color: var(--tenue);
+}
+
+#ajustes-volver {
+  width: 100%;
+  margin-top: 0.75rem;
 }
 
 ul {

@@ -24,9 +24,25 @@ export function buildManifest(apiUrl: string) {
       type: 'module',
     },
 
+    // La marca de Acheron —el río— en las cuatro medidas que Chrome pide: la
+    // barra de herramientas, la página de extensiones, y la ficha de la tienda.
+    // Salen de `Acheron-Purple-BgN.png` de EllysiaServer, la única variante con
+    // transparencia: un icono de barra convive con temas claros y oscuros, y
+    // uno con fondo opaco se ve como un recuadro pegado en uno de los dos.
+    icons: {
+      16: 'src/assets/icons/acheron-16.png',
+      32: 'src/assets/icons/acheron-32.png',
+      48: 'src/assets/icons/acheron-48.png',
+      128: 'src/assets/icons/acheron-128.png',
+    },
+
     action: {
       default_popup: 'src/popup/index.html',
       default_title: 'Acheron',
+      default_icon: {
+        16: 'src/assets/icons/acheron-16.png',
+        32: 'src/assets/icons/acheron-32.png',
+      },
     },
 
     // La directiva que hace falta es `wasm-unsafe-eval`, y SOLO ésa. El mensaje

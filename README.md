@@ -32,6 +32,10 @@ popup  ──mensaje──▶  service worker  ──credencial──▶  rellen
                           └── api.ellysia.es           el blob cifrado
 ```
 
+La extensión hace **una sola cosa**: leer la bóveda y rellenar una credencial en la página. No crea
+ni edita entradas — eso sigue siendo cosa de la SPA y de la app móvil—, y lo único configurable es
+cada cuánto se bloquea sola.
+
 El **service worker** es el único proceso con claves y texto en claro. El **popup** pregunta y
 pinta. El **rellenador** se inyecta en la página sólo cuando el usuario pulsa «Rellenar», recibe
 dos cadenas y no tiene acceso ni a la bóveda ni al almacén de sesión.
