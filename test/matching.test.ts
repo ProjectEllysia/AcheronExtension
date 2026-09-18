@@ -11,7 +11,7 @@
 
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import type { SchemaType } from '@projectellysia/acheron-core-web'
+import type { SchemaType } from '@projectellysia/acheron-core-js'
 import { matchableTypes, matchesHost, pageHost, storedHost } from '../src/background/matching.ts'
 
 test('el catálogo sólo aporta los tipos que declaran campo comparable', () => {

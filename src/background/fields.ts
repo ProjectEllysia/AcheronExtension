@@ -20,7 +20,7 @@
  * deduce nada: o el esquema lo declara, o no se rellena.
  */
 
-import type { SchemaType } from '@projectellysia/acheron-core-web'
+import type { SchemaType } from '@projectellysia/acheron-core-js'
 
 /** Los dos campos que hacen falta para rellenar un formulario de acceso. */
 export interface LoginFields {

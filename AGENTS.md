@@ -11,4 +11,4 @@ declara lo que declara) y [`docs/`](docs/) (la decisión sobre la sesión desblo
 siguen pendientes de ejecutar en Chrome real).
 
 Y una regla que conviene tener presente antes de escribir nada: **aquí no se añade criptografía ni
-nombres de campo**. Los dos vienen de `AcheronCore` a través de `@projectellysia/acheron-core-web`.
+nombres de campo**. Los dos vienen de `AcheronCore` a través de `@projectellysia/acheron-core-js`.

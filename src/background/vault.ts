@@ -16,9 +16,9 @@ import {
   b64decode,
   deriveKey,
   validateChecker,
-} from '@projectellysia/acheron-core-web'
+} from '@projectellysia/acheron-core-js'
 import type { Candidate } from '../shared/messages.js'
-import type { EncryptedStorable, VaultJson } from '@projectellysia/acheron-core-web'
+import type { EncryptedStorable, VaultJson } from '@projectellysia/acheron-core-js'
 import { apiFetch, currentUsername } from './auth.js'
 import { loginFieldsOf } from './fields.js'
 import { matchesHost, matchableTypes } from './matching.js'

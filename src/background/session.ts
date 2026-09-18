@@ -25,7 +25,7 @@
  * ese atacante, la clave no extraíble no cambia el desenlace.
  */
 
-import type { VaultJson } from '@projectellysia/acheron-core-web'
+import type { VaultJson } from '@projectellysia/acheron-core-js'
 import { DEFAULT_LOCK_MINUTES, MAX_LOCK_MINUTES } from '../shared/config.js'
 
 const SESSION_KEY = 'unlocked'

@@ -52,7 +52,7 @@ dos cadenas y no sabe nada más.
 - **El catálogo se recibe, no se importa**, en `matching.ts` y `fields.ts`. Es lo que permite que sus
   suites corran sin instalar el motor. Si alguien mete ahí un `import` del paquete, CI deja de poder
   probar la regla de dominios sin tocar GitHub Packages.
-- **`@projectellysia/acheron-core-web` se fija a una versión exacta, sin rangos.** En un contrato que
+- **`@projectellysia/acheron-core-js` se fija a una versión exacta, sin rangos.** En un contrato que
   decide qué campos se cifran, una actualización automática es un cambio que nadie revisó.
 
 ## Deuda conocida

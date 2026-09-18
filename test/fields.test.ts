@@ -9,7 +9,7 @@
 
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import type { SchemaType } from '@projectellysia/acheron-core-web'
+import type { SchemaType } from '@projectellysia/acheron-core-js'
 import { loginFieldsOf } from '../src/background/fields.ts'
 
 /** El catálogo real, copiado aquí para fijar el caso que hoy importa. */

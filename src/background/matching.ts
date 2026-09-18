@@ -17,7 +17,7 @@
  * una contraseña a quien no es.
  */
 
-import type { SchemaType } from '@projectellysia/acheron-core-web'
+import type { SchemaType } from '@projectellysia/acheron-core-js'
 
 /**
  * Este módulo NO importa el catálogo: lo recibe. Así la regla de comparación
