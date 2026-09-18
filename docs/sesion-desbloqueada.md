@@ -51,6 +51,43 @@ cifrada** y atacarla sin prisa, fuera de línea. Argon2id con 64 MiB y 3 pasadas
 de un robo de credenciales, y es una defensa real, pero es *la* defensa. Cambiar la decisión cuesta
 un `local` → `session` en [`auth.ts`](../src/background/auth.ts).
 
+### Revisada y aceptada — 2026-09-18
+
+La decisión se revisó y **se mantiene**. El motivo es el de arriba, dicho en corto: sin ella, el
+usuario tendría que escribir su usuario y su contraseña de Ellysia cada vez que enciende el
+ordenador, además de la maestra.
+
+La revisión fijó además el límite que no se cruza, y conviene que esté escrito porque es más
+estricto que «no guardar la maestra en disco»:
+
+> **La contraseña maestra no se guarda en claro en ninguna parte.** Ni en disco, ni en memoria más
+> allá de la función que la usa.
+
+Eso ya se cumple hoy, y no por casualidad. La maestra entra por el formulario del popup, viaja al
+service worker, se usa para derivar la clave y **muere en `unlock()`**; el campo del formulario se
+vacía en cuanto deja de hacer falta. Lo que sobrevive es la `vaultKey`, que es otra cosa: abre esta
+bóveda y nada más, y rotarla es un `changePassword`. Una maestra filtrada, en cambio, abre además
+el correo del usuario, porque las contraseñas se reutilizan.
+
+### La puerta que queda abierta: desbloqueo biométrico
+
+Lo único que podría justificar guardar algo más duradero es que estuviera **protegido por el
+sistema operativo**: Windows Hello, Touch ID o el equivalente de cada plataforma. Es como
+desbloquean 1Password y Bitwarden, y no es un atajo sino una propiedad distinta — el secreto no
+está «guardado en claro», está guardado de forma que sólo se libera tras un gesto que el sistema
+verifica.
+
+La vía técnica existe y tiene nombre: **WebAuthn con la extensión PRF**. Un autenticador de
+plataforma —que en Windows es Hello— deriva un secreto estable y reproducible, y con él se
+*envuelve* la `vaultKey` antes de guardarla. En disco no queda la clave sino un envoltorio que sin
+el gesto biométrico no se abre.
+
+No se ha implementado, y no debería colarse como un cambio pequeño: **altera la decisión de este
+documento**, porque introduce persistencia en disco de material criptográfico, y eso merece su
+propio análisis. En particular, hay que responder qué pasa cuando el usuario cambia o retira su
+factor biométrico, y qué garantiza realmente el autenticador en cada plataforma. Merece una issue
+propia con un espolón, como se hizo con Argon2id en MV3.
+
 ## Si alguna sonda falla
 
 El diseño se apoya en el comportamiento **documentado** de dos APIs, no medido. Las comprobaciones
