@@ -13,10 +13,18 @@
  * vista, que es la peor forma de fallar.
  */
 
+import { MAX_LOCK_MINUTES } from '../shared/config.js'
 import type { FillMessage, Request, Response } from '../shared/messages.js'
 import { isAuthenticated, login, logout, verifyMfa } from './auth.js'
 import { pageHost } from './matching.js'
-import { hardenSessionStorage, lock, registerLockTriggers, touchSession } from './session.js'
+import {
+  hardenSessionStorage,
+  lock,
+  lockMinutes,
+  registerLockTriggers,
+  setLockMinutes,
+  touchSession,
+} from './session.js'
 import { candidatesFor, isUnlocked, reveal, unlock } from './vault.js'
 
 // Antes de guardar nada: el almacén de sesión queda fuera del alcance de los
@@ -76,6 +84,15 @@ async function handle(message: Request): Promise<Response<unknown>> {
 
     case 'fill':
       return ok(await fill(message.id))
+
+    case 'settings':
+      return ok({ lockMinutes: await lockMinutes(), maxLockMinutes: MAX_LOCK_MINUTES })
+
+    case 'settings/lock-minutes':
+      return ok({
+        lockMinutes: await setLockMinutes(message.minutes),
+        maxLockMinutes: MAX_LOCK_MINUTES,
+      })
   }
 }
 

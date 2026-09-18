@@ -18,6 +18,14 @@ export interface Candidate {
   username: string
 }
 
+/** Lo que el usuario puede configurar. Hoy, una sola cosa. */
+export interface Settings {
+  /** Minutos de inactividad antes de que la bóveda se cierre sola. */
+  lockMinutes: number
+  /** Techo, para que el formulario lo enseñe en vez de rechazar al guardar. */
+  maxLockMinutes: number
+}
+
 /** Estado que el popup necesita para decidir qué pantalla pintar. */
 export interface Status {
   authenticated: boolean
@@ -36,6 +44,8 @@ export type Request =
   | { type: 'lock' }
   | { type: 'candidates' }
   | { type: 'fill'; id: string }
+  | { type: 'settings' }
+  | { type: 'settings/lock-minutes'; minutes: number }
 
 /**
  * Lo que contesta. El error viaja como dato y no como excepción porque

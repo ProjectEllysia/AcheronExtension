@@ -15,7 +15,10 @@
     -->
     <main id="app">
       <header>
+        <img src="../assets/icons/acheron-32.png" alt="" width="20" height="20" />
         <h1>Acheron</h1>
+        <span class="espacio"></span>
+        <button id="ajustes" type="button" hidden title="Ajustes">Ajustes</button>
         <button id="lock" type="button" hidden>Bloquear</button>
       </header>
 
@@ -48,6 +51,24 @@
         <p id="host" class="hint"></p>
         <ul id="candidates"></ul>
         <p id="empty" class="hint" hidden>No hay credenciales guardadas para este sitio.</p>
+      </section>
+
+      <section id="screen-ajustes" hidden>
+        <form id="form-ajustes">
+          <label>
+            Bloquear la bóveda tras
+            <input id="lock-minutes" type="number" min="1" step="1" required />
+          </label>
+          <p class="hint" id="ajustes-tope"></p>
+          <button type="submit">Guardar</button>
+        </form>
+        <p id="ajustes-ok" class="hint" hidden></p>
+        <p class="hint">
+          Desbloquear cuesta unos 137&nbsp;ms, así que un tiempo corto apenas se nota.
+          No existe un «no bloquear nunca»: convertiría un equipo desatendido en un robo
+          de todas tus credenciales.
+        </p>
+        <button id="ajustes-volver" type="button">Volver</button>
       </section>
 
       <p id="error" class="error" hidden></p>
