@@ -4,7 +4,12 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "types": ["chrome", "vite/client"],
+    "types": ["chrome", "node", "vite/client"],
+
+    // Las suites importan `../src/...ts` con extensión porque las ejecuta Node
+    // directamente, sin compilar. Es el precio de no tener paso de build para
+    // probar, y sale a cuenta.
+    "allowImportingTsExtensions": true,
 
     "strict": true,
     "noUncheckedIndexedAccess": true,

@@ -28,11 +28,18 @@
  * marca llegue.
  */
 
-/** Lo que esta función necesita saber de un tipo del catálogo. */
+/**
+ * Lo que esta función necesita saber de un tipo del catálogo.
+ *
+ * `secret` se declara `boolean` y no `true` porque es lo que el paquete
+ * publica: su `schema.d.ts` no es el que está escrito a mano en AcheronCore
+ * —donde sí dice `secret?: true`— sino uno que `tsc` infiere del `.js` y que lo
+ * pisa al compilar. Apretar más el tipo aquí sólo consigue que no encaje.
+ */
 export interface CatalogueType {
   category: string
   matchKey?: string
-  fields: readonly { key: string; secret?: true }[]
+  fields: readonly { key: string; secret?: boolean }[]
 }
 
 /** Los dos campos que hacen falta para rellenar un formulario de acceso. */
