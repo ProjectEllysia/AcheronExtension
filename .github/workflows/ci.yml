@@ -33,9 +33,17 @@ jobs:
   build:
     name: Construcción
     runs-on: ubuntu-latest
-    # El motor criptográfico vive en GitHub Packages, que es privado: hace falta
-    # que el repositorio tenga acceso al paquete (Packages → acheron-core-web →
-    # Manage Actions access → añadir AcheronExtension).
+    # El motor criptográfico vive en GitHub Packages. A fecha de 2026-09-18 el
+    # paquete sigue PRIVADO y vinculado a `AcheronCoreWeb`, el repositorio que
+    # se archivó al unificar en `AcheronCore`, así que el GITHUB_TOKEN de este
+    # repositorio recibe un 403 `permission_denied: read_package`.
+    #
+    # Se arregla por la interfaz de GitHub, de una de estas dos formas:
+    #   - Packages → acheron-core-web → Package settings → Change visibility →
+    #     Public. Coherente con que `AcheronCore` ya es público, y entonces
+    #     cualquier token lo lee.
+    #   - O bien Manage Actions access → añadir `AcheronExtension`, si se
+    #     prefiere que el paquete siga privado.
     permissions:
       contents: read
       packages: read
