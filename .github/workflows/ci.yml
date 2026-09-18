@@ -33,23 +33,16 @@ jobs:
   build:
     name: Construcción
     runs-on: ubuntu-latest
-    # El motor criptográfico vive en GitHub Packages. A fecha de 2026-09-18 el
-    # paquete sigue PRIVADO, y su repositorio vinculado sigue siendo
-    # `AcheronCoreWeb` —el que se archivó al unificar en `AcheronCore`— porque
-    # GitHub conserva el vínculo de la PRIMERA publicación aunque las versiones
-    # siguientes salgan de otro sitio: 2.2.0 se publicó desde `AcheronCore`, con
-    # sus cinco jobs en verde. Como el acceso se hereda del repositorio
-    # vinculado, el GITHUB_TOKEN de éste recibe un 403 `permission_denied`.
+    # El motor criptográfico vive en GitHub Packages, y hasta la 2.3.0 eso era
+    # un problema aquí. Se llamaba entonces `acheron-core-web`, un paquete
+    # vinculado para siempre al repositorio donde nació —archivado al unificar
+    # todo en AcheronCore—, del que heredaba permisos: este job recibía un
+    # `403 permission_denied: read_package` y no había forma de arreglarlo sin
+    # un ajuste manual que el propio archivado bloqueaba.
     #
-    # Se arregla por la interfaz de GitHub, de una de estas dos formas:
-    #   - Packages → acheron-core-web → Package settings → Change visibility →
-    #     Public. Coherente con que `AcheronCore` ya es público, y entonces
-    #     cualquier token lo lee.
-    #   - O bien Manage Actions access → añadir `AcheronExtension`, si se
-    #     prefiere que el paquete siga privado.
-    permissions:
-      contents: read
-      packages: read
+    # Desde la 2.4.0 el paquete se llama `acheron-core-js` y nace en
+    # `AcheronCore`, que es público y está vivo, así que hereda su visibilidad.
+    # El GITHUB_TOKEN del runner basta: ni ajustes a mano, ni secretos, ni PAT.
     steps:
       - uses: actions/checkout@v4
 

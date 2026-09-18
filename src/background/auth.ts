@@ -96,7 +96,7 @@ export async function isAuthenticated(): Promise<boolean> {
 /**
  * El `apiFetch` que este paquete inyecta en `vaultWrite`.
  *
- * `@projectellysia/acheron-core-web/sync` recibe su cliente HTTP en vez de
+ * `@projectellysia/acheron-core-js/sync` recibe su cliente HTTP en vez de
  * elegirlo, y por eso la concurrencia optimista del vault funciona desde una
  * extensión sin tocar una línea del motor.
  *

@@ -22,7 +22,7 @@ motor criptográfico y no falla en nada más, que despista.
 |---|---|
 | Tocar criptografía o añadir un tipo de storable | **En este repositorio, en ningún sitio.** Va a `AcheronCore` |
 | Cambiar cuándo una credencial corresponde a una página | `src/background/matching.ts` + su suite |
-| Cambiar de qué campo salen usuario y contraseña | `src/background/fields.ts` + su suite |
+| Cambiar de qué campo salen usuario y contraseña | **En el esquema de AcheronCore**, no aquí: `identityKey` y `secret`. `src/background/fields.ts` sólo los lee |
 | Tocar dónde vive o cuánto dura la bóveda abierta | `src/background/session.ts`, y **antes** `docs/sesion-desbloqueada.md` |
 | Hablar con la API de Ellysia | `src/background/auth.ts` (`apiFetch` sale de ahí) |
 | Añadir una operación que el popup pide | `src/shared/messages.ts` y el `switch` de `service-worker.ts` |
@@ -52,14 +52,12 @@ dos cadenas y no sabe nada más.
 - **El catálogo se recibe, no se importa**, en `matching.ts` y `fields.ts`. Es lo que permite que sus
   suites corran sin instalar el motor. Si alguien mete ahí un `import` del paquete, CI deja de poder
   probar la regla de dominios sin tocar GitHub Packages.
-- **`@projectellysia/acheron-core-web` se fija a una versión exacta, sin rangos.** En un contrato que
+- **`@projectellysia/acheron-core-js` se fija a una versión exacta, sin rangos.** En un contrato que
   decide qué campos se cifran, una actualización automática es un cambio que nadie revisó.
 
 ## Deuda conocida
 
-- **El paquete no exporta sus tipos.** `VaultJson` y compañía están declarados en
-  `src/shared/vault-json.ts` a mano, estructuralmente compatibles. Debe borrarse en cuanto
-  `AcheronCore` los reexporte.
-- **Al esquema le falta una marca para el identificador de acceso.** `fields.ts` lo deduce por
-  descarte, y el razonamiento depende del orden de los campos. Lo correcto es una marca hermana de
-  `matchKey` en `schema.json`.
+Ninguna pendiente. Las tres que había —los tipos del paquete sin reexportar, el `schema.d.ts`
+publicado que era un tipo inferido, y la falta de una marca para el identificador de acceso— se
+cerraron en el catálogo 2.3.0, y este repositorio las consume en vez de compensarlas: ya no hay
+`vault-json.ts` ni deducción por descarte.

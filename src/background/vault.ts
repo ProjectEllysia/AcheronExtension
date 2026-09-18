@@ -16,9 +16,9 @@ import {
   b64decode,
   deriveKey,
   validateChecker,
-} from '@projectellysia/acheron-core-web'
+} from '@projectellysia/acheron-core-js'
 import type { Candidate } from '../shared/messages.js'
-import type { PlainStorable, VaultJson } from '../shared/vault-json.js'
+import type { EncryptedStorable, VaultJson } from '@projectellysia/acheron-core-js'
 import { apiFetch, currentUsername } from './auth.js'
 import { loginFieldsOf } from './fields.js'
 import { matchesHost, matchableTypes } from './matching.js'
@@ -84,7 +84,7 @@ export async function candidatesFor(host: string): Promise<Candidate[]> {
   for (const { category, matchKey } of MATCHABLE) {
     const items = (session.vault[category] as Record<string, unknown>[] | undefined) ?? []
     for (const item of items) {
-      const plain = (await open.decryptStorable(category, item as never)) as PlainStorable
+      const plain = await open.decryptStorable(category, item as EncryptedStorable)
       if (!matchesHost(host, plain, matchKey)) continue
 
       const { identityKey } = loginFieldsOf(STORABLE_SCHEMA, category)
@@ -117,7 +117,7 @@ export async function reveal(
     const item = items.find((candidate) => String(candidate.id ?? '') === id)
     if (!item) continue
 
-    const plain = (await open.decryptStorable(category, item as never)) as PlainStorable
+    const plain = await open.decryptStorable(category, item as EncryptedStorable)
     if (!matchesHost(host, plain, matchKey)) break
 
     const { identityKey, secretKey } = loginFieldsOf(STORABLE_SCHEMA, category)
@@ -148,7 +148,7 @@ async function reopen(): Promise<{ open: OpenVault; session: UnlockedSession }> 
     false,
     ['encrypt', 'decrypt'],
   )
-  return { open: new OpenVault(session.vault as never, vaultKey), session }
+  return { open: new OpenVault(session.vault, vaultKey), session }
 }
 
 /** `GET /acheron/vault`: el blob cifrado, tal y como el servidor lo guarda. */

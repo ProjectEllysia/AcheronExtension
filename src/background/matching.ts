@@ -17,18 +17,14 @@
  * una contraseña a quien no es.
  */
 
+import type { SchemaType } from '@projectellysia/acheron-core-js'
+
 /**
  * Este módulo NO importa el catálogo: lo recibe. Así la regla de comparación
  * —que es donde está el riesgo— se prueba con un `node --test` sin necesidad de
  * instalar el motor ni montar un navegador. El catálogo de verdad se lo pasa
  * `vault.ts`, que sí lo importa del paquete.
  */
-
-/** Lo que este módulo necesita saber de un tipo del catálogo. */
-export interface CatalogueType {
-  category: string
-  matchKey?: string
-}
 
 /** Un tipo que el esquema declara asociable a una página web. */
 export interface MatchableType {
@@ -37,7 +33,7 @@ export interface MatchableType {
 }
 
 /** Filtra del catálogo los tipos que declaran campo comparable con la URL. */
-export function matchableTypes(schema: readonly CatalogueType[]): MatchableType[] {
+export function matchableTypes(schema: readonly SchemaType[]): MatchableType[] {
   return schema
     .filter((type) => type.matchKey != null)
     .map((type) => ({ category: type.category, matchKey: type.matchKey as string }))
