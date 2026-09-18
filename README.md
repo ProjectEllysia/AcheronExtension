@@ -15,8 +15,8 @@ del motor ni una quinta del catálogo.
 | | |
 |---|---|
 | **Criptografía** | Ninguna. Viene de `@projectellysia/acheron-core-web`, versión exacta |
-| **Catálogo de tipos** | Ninguno. Viene del mismo paquete, que lo trae dentro |
-| **Nombres de campo** | Ninguno escrito a mano. Se deducen del catálogo ([`fields.ts`](src/background/fields.ts)) |
+| **Catálogo de tipos** | Ninguno. Viene del mismo paquete, que lo trae dentro, con sus tipos |
+| **Nombres de campo** | Ninguno escrito a mano ni deducido. Los declara el catálogo: `matchKey`, `identityKey` y `secret` ([`fields.ts`](src/background/fields.ts)) |
 | **Lo propio de este repositorio** | El manifiesto MV3, el ciclo de vida de la sesión, la regla de correspondencia página↔credencial y el rellenador |
 
 Si alguna vez hace falta tocar cripto o añadir un tipo de storable, el sitio es `AcheronCore`, no

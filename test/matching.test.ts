@@ -11,12 +11,15 @@
 
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
+import type { SchemaType } from '@projectellysia/acheron-core-web'
 import { matchableTypes, matchesHost, pageHost, storedHost } from '../src/background/matching.ts'
 
-const ACCOUNT = { category: 'accounts', matchKey: 'domain' }
-
 test('el catálogo sólo aporta los tipos que declaran campo comparable', () => {
-  const schema = [ACCOUNT, { category: 'creditcards' }, { category: 'securenotes' }]
+  const schema: SchemaType[] = [
+    { kind: 'account', category: 'accounts', matchKey: 'domain', fields: [{ key: 'domain' }] },
+    { kind: 'creditcard', category: 'creditcards', fields: [{ key: 'cvv', secret: true }] },
+    { kind: 'securenote', category: 'securenotes', fields: [{ key: 'content' }] },
+  ]
   assert.deepEqual(matchableTypes(schema), [{ category: 'accounts', matchKey: 'domain' }])
 })
 
