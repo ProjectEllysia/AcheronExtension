@@ -50,9 +50,14 @@ jobs:
 
       # package-lock.json está en .gitignore, como en AcheronCore: no hay
       # lockfile que cachear ni con el que hacer `npm ci`.
+      # Las dos variables, y no es redundancia: el `.npmrc` del repositorio
+      # tiene precedencia sobre el que escribe `setup-node`, y resuelve
+      # `${NPM_TOKEN}`. Con sólo `NODE_AUTH_TOKEN` se manda un token vacío y el
+      # registro contesta un 401 que parece un problema de permisos y no lo es.
       - name: Install dependencies
         run: npm install --no-audit --no-fund
         env:
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Typecheck
