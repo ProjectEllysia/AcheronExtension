@@ -1,0 +1,10 @@
+node_modules/
+dist/
+package-lock.json
+
+# La URL de la API y el resto de la configuración de cada máquina.
+.env
+.env.local
+
+# Lo que produce el empaquetado para subir a la Chrome Web Store.
+*.zip

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Acheron</title>
+    <link rel="stylesheet" href="./popup.css" />
+  </head>
+  <body>
+    <!--
+      Cuatro pantallas excluyentes; `popup.ts` enseña una y esconde el resto.
+      Se declaran en el HTML en vez de construirse desde JavaScript para que la
+      política de seguridad del manifiesto no tenga que permitir nada más de lo
+      que permite: sin plantillas en cadenas, no hay nada que generar en tiempo
+      de ejecución.
+    -->
+    <main id="app">
+      <header>
+        <h1>Acheron</h1>
+        <button id="lock" type="button" hidden>Bloquear</button>
+      </header>
+
+      <section id="screen-login" hidden>
+        <p class="hint">Entra con tu cuenta de Ellysia.</p>
+        <form id="form-login">
+          <label>Usuario<input id="login-username" type="text" autocomplete="username" required /></label>
+          <label>Contraseña<input id="login-password" type="password" autocomplete="current-password" required /></label>
+          <button type="submit">Entrar</button>
+        </form>
+      </section>
+
+      <section id="screen-mfa" hidden>
+        <p class="hint">Introduce el código de tu aplicación de autenticación.</p>
+        <form id="form-mfa">
+          <label>Código<input id="mfa-code" type="text" inputmode="numeric" autocomplete="one-time-code" required /></label>
+          <button type="submit">Verificar</button>
+        </form>
+      </section>
+
+      <section id="screen-unlock" hidden>
+        <p class="hint">Tu contraseña maestra no sale de este navegador.</p>
+        <form id="form-unlock">
+          <label>Contraseña maestra<input id="unlock-password" type="password" required /></label>
+          <button type="submit">Desbloquear</button>
+        </form>
+      </section>
+
+      <section id="screen-vault" hidden>
+        <p id="host" class="hint"></p>
+        <ul id="candidates"></ul>
+        <p id="empty" class="hint" hidden>No hay credenciales guardadas para este sitio.</p>
+      </section>
+
+      <p id="error" class="error" hidden></p>
+    </main>
+
+    <script type="module" src="./popup.ts"></script>
+  </body>
+</html>

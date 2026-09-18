@@ -1,0 +1,28 @@
+{
+  "name": "@projectellysia/acheron-extension",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Acheron browser extension (Chrome MV3) - autofills vault credentials using the shared crypto engine",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run typecheck && node --test \"test/*.test.ts\"",
+    "zip": "npm run build && cd dist && zip -r ../acheron-extension.zip ."
+  },
+  "dependencies": {
+    "@projectellysia/acheron-core-web": "2.2.0"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^2.7.1",
+    "@types/chrome": "^0.1.28",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.12"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ProjectEllysia/AcheronExtension.git"
+  },
+  "license": "UNLICENSED"
+}

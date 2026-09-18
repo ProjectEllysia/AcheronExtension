@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# La extensión no publica nada: se carga sin empaquetar desde `dist/`, y la
+# subida a la Chrome Web Store es una decisión con su propia issue. Así que aquí
+# no hay job de publicación, sólo la comprobación de que lo que hay se construye
+# y sus reglas siguen diciendo lo que dicen.
+
+jobs:
+  test:
+    name: Reglas
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Node 24 ejecuta TypeScript directamente, sin compilar. Las suites de
+      # `test/` no dependen del motor criptográfico —de ahí que `matching.ts` y
+      # `fields.ts` reciban el catálogo en vez de importarlo—, así que este job
+      # corre sin tocar GitHub Packages y falla rápido si la regla de dominios
+      # se rompe.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Run suites
+        run: node --test "test/*.test.ts"
+
+  build:
+    name: Construcción
+    runs-on: ubuntu-latest
+    # El motor criptográfico vive en GitHub Packages, que es privado: hace falta
+    # que el repositorio tenga acceso al paquete (Packages → acheron-core-web →
+    # Manage Actions access → añadir AcheronExtension).
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: https://npm.pkg.github.com
+          scope: '@projectellysia'
+
+      # package-lock.json está en .gitignore, como en AcheronCore: no hay
+      # lockfile que cachear ni con el que hacer `npm ci`.
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # Que `dist/` salga es la comprobación que de verdad importa aquí: es
+      # donde se ve si el empaquetado sigue resolviendo `hash-wasm` dentro de un
+      # service worker de tipo módulo, que es lo único que MV3 pone difícil.
+      - name: Build
+        run: npm run build
