@@ -1,0 +1,8 @@
+{
+  "manifest_version": 3,
+  "name": "Espolón: WebAuthn PRF en MV3",
+  "description": "Desechable. Comprueba si una página de extensión puede derivar un secreto estable con Windows Hello.",
+  "version": "0.0.1",
+  "action": { "default_popup": "espolon.html" },
+  "permissions": ["storage"]
+}
