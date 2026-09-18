@@ -34,9 +34,12 @@ jobs:
     name: Construcción
     runs-on: ubuntu-latest
     # El motor criptográfico vive en GitHub Packages. A fecha de 2026-09-18 el
-    # paquete sigue PRIVADO y vinculado a `AcheronCoreWeb`, el repositorio que
-    # se archivó al unificar en `AcheronCore`, así que el GITHUB_TOKEN de este
-    # repositorio recibe un 403 `permission_denied: read_package`.
+    # paquete sigue PRIVADO, y su repositorio vinculado sigue siendo
+    # `AcheronCoreWeb` —el que se archivó al unificar en `AcheronCore`— porque
+    # GitHub conserva el vínculo de la PRIMERA publicación aunque las versiones
+    # siguientes salgan de otro sitio: 2.2.0 se publicó desde `AcheronCore`, con
+    # sus cinco jobs en verde. Como el acceso se hereda del repositorio
+    # vinculado, el GITHUB_TOKEN de éste recibe un 403 `permission_denied`.
     #
     # Se arregla por la interfaz de GitHub, de una de estas dos formas:
     #   - Packages → acheron-core-web → Package settings → Change visibility →

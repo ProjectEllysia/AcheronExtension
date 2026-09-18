@@ -50,8 +50,9 @@ Tres decisiones sostienen la seguridad del conjunto, y las tres están razonadas
 
 - **Node 24+.** Ejecuta TypeScript directamente, y de ahí que las suites de `test/` no compilen nada.
 - **Acceso al paquete.** `@projectellysia/acheron-core-web` está en GitHub Packages y hoy sigue
-  publicado como **privado**, vinculado al repositorio archivado `AcheronCoreWeb`. Hace falta un
-  token con `read:packages` en la variable `NPM_TOKEN`:
+  publicado como **privado**, y su repositorio vinculado sigue siendo el archivado
+  `AcheronCoreWeb` aunque las versiones salgan ya de `AcheronCore`. Hace falta un token con
+  `read:packages` en la variable `NPM_TOKEN`:
 
   ```bash
   gh auth refresh -s read:packages
